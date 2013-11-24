@@ -135,13 +135,17 @@ func handleNewEvent(topic, event string) {
 func parseFilename(filename string) string {
 	dateName := strings.Split(filename, "_")
 	if len(dateName) == 2 {
-		nameExt := strings.Split(dateName[1], ".")
-		if len(nameExt) == 2 {
-			return fmt.Sprintf("%s (%s)", nameExt[0], dateName[0])
+		nameExt := strings.SplitAfter(dateName[1], ".")
+		if len(nameExt) >= 2 {
+			filenameDashes := nameExt[0 : len(nameExt)-1]
+			parsedFilename := strings.Join(filenameDashes, "")
+			parsedFilename = strings.Replace(parsedFilename, "-", " ", -1)
+			parsedFilename = strings.TrimRight(parsedFilename, ".")
+			return fmt.Sprintf("%s (%s)", parsedFilename, dateName[0])
 		}
 	}
 
-	return ""
+	return "unparsable filename"
 }
 
 func listTopics() {
