@@ -19,7 +19,7 @@ to do things that require you to edit files.
 This is hardcoded at `~/notes` in the `nogo.go` file. Simply change the
 `notesSubDir` variables from `notes` to whatever you want if you'd like your
 notes to be saved somewhere else. The final path is just a concatenation of
-"$HOME/{notesSubDir}".
+`"$HOME/{notesSubDir}"`.
 
 ## Requirements
 
