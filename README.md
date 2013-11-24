@@ -2,7 +2,30 @@ nogo
 ====
 
 nogo is a command line utility that will create and parse a directory of
-markdown files for simplify organized note taking.
+markdown files for simplified organized note taking. nogo will maintain a
+simple directory structure and will launch your editor of choice to edit your
+notes.
+
+## Configuration
+
+### Editor
+
+Set the `$EDITOR` environment variable to your test based editor of choice. You
+likely already have this set (to `vim` for example) if you use the command line
+to do things that require you to edit files.
+
+### Notes path
+
+This is hardcoded at `~/notes` in the `nogo.go` file. Simply change the
+`notesSubDir` variables from `notes` to whatever you want if you'd like your
+notes to be saved somewhere else. The final path is just a concatenation of
+"$HOME/{notesSubDir}".
+
+## Requirements
+
+The only requirement is that you have Go installed. If you don't have Go
+installed and, for some reason, would like to keep it that way, let me know
+and I'll upload a nogo binary somewhere for you to download.
 
 ## Installation
 
