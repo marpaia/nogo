@@ -38,6 +38,29 @@ go get github.com/marpaia/nogo
 
 This project has no external dependencies other than the Go standard library.
 
+## Hacking
+
+If you'd like to customize nogo, do so as you would any other Go project. Use
+`go get` as described above to download and install the software, edit the code
+in whatever way you see fit, and execute `go install github.com/marpaia/nogo`.
+
+## Contributing
+
+Please contribute and help improve this project!
+
+- Fork the repo
+- Improve the code
+- Submit a pull request
+
+## Areas for improvement
+
+Check out the issues labeled "enhancement" for easy contribution/improvement
+ideas. This might be especially interesting to you if you'd like to cut your
+teeth contributing to open source software as this is a pretty simple piece of
+code that can be improved in a lot of ways.
+
+https://github.com/marpaia/nogo/issues?labels=enhancement
+
 ## Examples
 
 ```
@@ -72,3 +95,4 @@ notes in this:
 
 ~
 ```
+
