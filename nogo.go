@@ -13,11 +13,11 @@ import (
 
 // this will store notes in ~/notes if the NOGODIR environment variable isn't
 // set
-var notesSubDir = "notes"
+var NotesSubDir = "notes"
 
 // this will be used as the default editor if the EDITOR environment variable
 // isn't set
-var defaultEditor = "vim"
+var DefaultEditor = "vim"
 
 var helpText = `
 nogo - the notes helper
@@ -37,12 +37,12 @@ var editor string
 func init() {
 	directory = os.Getenv("NOGODIR")
 	if directory == "" {
-		directory = fmt.Sprintf("%s/%s", os.Getenv("HOME"), notesSubDir)
+		directory = fmt.Sprintf("%s/%s", os.Getenv("HOME"), NotesSubDir)
 	}
 
 	editor = os.Getenv("EDITOR")
 	if editor == "" {
-		editor = defaultEditor
+		editor = DefaultEditor
 	}
 }
 
