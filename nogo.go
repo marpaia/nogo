@@ -19,7 +19,7 @@ var notesSubDir = "notes"
 // isn't set
 var defaultEditor = "vim"
 
-var help_text = `
+var helpText = `
 nogo - the notes helper
 
 actions:
@@ -47,7 +47,7 @@ func init() {
 }
 
 func help(exit int) {
-	fmt.Println(help_text)
+	fmt.Println(helpText)
 	os.Exit(exit)
 }
 
