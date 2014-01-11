@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 // this will store notes in ~/notes if the NOGODIR environment variable isn't
@@ -66,12 +65,6 @@ func acceptInput(question string) string {
 
 func normalizeString(s *string) {
 	*s = strings.Replace(*s, " ", "-", -1)
-}
-
-func generateTimestamp() string {
-	layout := "2006-1-2_"
-	timeNow := time.Now()
-	return timeNow.Format(layout)
 }
 
 func openFile(fileName string) {
@@ -134,7 +127,7 @@ func handleNewEvent(topic, event string) {
 	createDir(notesDirectory)
 
 	// Make the filename and filepath for the new notes file
-	fileName := fmt.Sprintf("%s%s.md", generateTimestamp(), event)
+	fileName := fmt.Sprintf("%s.md", event)
 	fullPath := filepath.Join(notesDirectory, fileName)
 
 	// Create the new notes file
@@ -145,19 +138,28 @@ func handleNewEvent(topic, event string) {
 }
 
 func parseFilename(filename string) string {
-	dateName := strings.Split(filename, "_")
-	if len(dateName) == 2 {
-		nameExt := strings.SplitAfter(dateName[1], ".")
-		if len(nameExt) >= 2 {
-			filenameDashes := nameExt[0 : len(nameExt)-1]
-			parsedFilename := strings.Join(filenameDashes, "")
-			parsedFilename = strings.Replace(parsedFilename, "-", " ", -1)
-			parsedFilename = strings.TrimRight(parsedFilename, ".")
-			return fmt.Sprintf("%s (%s)", parsedFilename, dateName[0])
-		}
+	return strings.TrimSuffix(filename, ".md")
+}
+
+func isDir(path string) bool {
+	f, err := os.Open(path)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+	fi, err := f.Stat()
+	if err != nil {
+		return false
+	}
+	switch mode := fi.Mode(); {
+	case mode.IsDir():
+		return true
+	case mode.IsRegular():
+		return false
+	default:
+		return false
 	}
 
-	return "unparsable filename"
 }
 
 func listTopics() {
@@ -168,14 +170,23 @@ func listTopics() {
 	}
 
 	fmt.Println()
-	if len(files) == 0 {
+
+	toPrint := []string{}
+	for _, file := range files {
+		path := fmt.Sprintf("%s/%s", directory, file.Name())
+		if isDir(path) && !strings.HasPrefix(file.Name(), ".git") {
+			toPrint = append(toPrint, file.Name())
+		}
+	}
+
+	if len(toPrint) == 0 {
 		fmt.Println("looks like there aren't any topcis to list!")
 	} else {
 		fmt.Println("all topics:")
 	}
 
-	for _, file := range files {
-		fmt.Println("  ", file.Name())
+	for _, file := range toPrint {
+		fmt.Println("  ", file)
 	}
 	fmt.Println()
 }
