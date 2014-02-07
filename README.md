@@ -30,7 +30,7 @@ actions:
 
 ~ nogo ls
 
-looks like there aren't any topcis to list!
+looks like there aren't any topics to list!
 
 ~ nogo new
 Enter the notes topic: this

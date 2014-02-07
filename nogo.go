@@ -188,7 +188,7 @@ func listTopics() {
 	}
 
 	if len(toPrint) == 0 {
-		fmt.Println("looks like there aren't any topcis to list!")
+		fmt.Println("looks like there aren't any topics to list!")
 	} else {
 		fmt.Println("all topics:")
 	}
