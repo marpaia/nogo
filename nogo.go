@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -138,7 +139,7 @@ func handleNewEvent(topic, event string) {
 }
 
 func parseFilename(filename string) string {
-	return strings.TrimSuffix(filename, ".md")
+	return strings.Replace(strings.TrimSuffix(filename, ".md"), "-", " ", -1)
 }
 
 func isDir(path string) bool {
@@ -191,8 +192,27 @@ func listTopics() {
 	fmt.Println()
 }
 
+func findTopicBySubstring(substring string) (string, error) {
+	topics, err := ioutil.ReadDir(directory)
+	if err != nil {
+		return "", err
+	}
+	for _, topic := range topics {
+		if strings.Contains(topic.Name(), substring) {
+			return topic.Name(), nil
+		}
+	}
+
+	return "", errors.New("Couldn't find that filename")
+}
+
 func listNotes(topic string) {
-	topicDir := fmt.Sprintf("%s/%s", directory, topic)
+	completeTopic, err := findTopicBySubstring(topic)
+	if err != nil {
+		fmt.Println("Oops, couldn't find that topic:", topic)
+		os.Exit(1)
+	}
+	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
@@ -203,7 +223,7 @@ func listNotes(topic string) {
 	if len(files) == 0 {
 		fmt.Println("looks like there aren't any notes to list!")
 	} else {
-		fmt.Printf("notes in %s:\n", topic)
+		fmt.Printf("notes in %s:\n", completeTopic)
 	}
 
 	for _, file := range files {
@@ -215,10 +235,16 @@ func listNotes(topic string) {
 }
 
 func editFile(topic, target string) {
-	topicDir := fmt.Sprintf("%s/%s", directory, topic)
+	completeTopic, err := findTopicBySubstring(topic)
+	if err != nil {
+		fmt.Println("Oops, couldn't find that topic:", topic)
+		os.Exit(1)
+	}
+	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
+		os.Exit(1)
 	}
 
 	target = strings.Replace(target, " ", "-", -1)
@@ -227,7 +253,7 @@ func editFile(topic, target string) {
 	for _, file := range files {
 		if strings.Contains(file.Name(), target) {
 			found = true
-			fullPath := fmt.Sprintf("%s/%s/%s", directory, topic, file.Name())
+			fullPath := fmt.Sprintf("%s/%s/%s", directory, completeTopic, file.Name())
 			openFile(fullPath)
 		}
 	}
@@ -268,7 +294,7 @@ func main() {
 			fmt.Println("I need a topic and a note to edit!")
 			os.Exit(1)
 		}
-		editFile(os.Args[2], strings.Join(os.Args[3:], " "))
+		editFile(os.Args[2], strings.Join(os.Args[3:], "-"))
 	default:
 		help(0)
 	}
