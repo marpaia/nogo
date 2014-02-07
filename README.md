@@ -16,10 +16,12 @@ to do things that require you to edit files.
 
 ### Notes path
 
-This is hardcoded at `~/notes` in the `nogo.go` file. Simply change the
-`notesSubDir` variables from `notes` to whatever you want if you'd like your
-notes to be saved somewhere else. The final path is just a concatenation of
-`"$HOME/{notesSubDir}"`.
+By default, this is set to be `~/notes`. Simply set the `NOGODIR` environment
+variable if you'd like this to be different.
+
+```
+export NOGODIR="/Users/marpaia/Desktop"
+```
 
 ## Requirements
 
