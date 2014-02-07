@@ -234,6 +234,48 @@ func listNotes(topic string) {
 
 }
 
+func findFileInList(files []os.FileInfo, target, completeTopic string) {
+	target = strings.Replace(target, " ", "-", -1)
+	var found bool
+
+	for _, file := range files {
+		if strings.Contains(file.Name(), target) {
+			found = true
+			fullPath := fmt.Sprintf("%s/%s/%s", directory, completeTopic, file.Name())
+			openFile(fullPath)
+			os.Exit(0)
+		}
+	}
+
+	if !found {
+		fmt.Println("Oops, couldn't find that file!")
+		os.Exit(1)
+	}
+}
+
+func editFileInTopic(topic string) {
+	completeTopic, err := findTopicBySubstring(topic)
+	if err != nil {
+		fmt.Println("Oops, couldn't find that topic:", topic)
+		os.Exit(1)
+	}
+	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
+	files, err := ioutil.ReadDir(topicDir)
+	if err != nil {
+		fmt.Println("Oops, couldn't read that directory:", topicDir)
+		os.Exit(1)
+	}
+	if len(files) > 0 {
+		fmt.Printf("\nFiles in %s:\n", completeTopic)
+	}
+	for _, file := range files {
+		fmt.Printf(" - %s\n", parseFilename(file.Name()))
+	}
+	fmt.Println()
+	file := acceptInput(fmt.Sprintf("What file would you like to edit in %s? ", completeTopic))
+	findFileInList(files, file, completeTopic)
+}
+
 func editFile(topic, target string) {
 	completeTopic, err := findTopicBySubstring(topic)
 	if err != nil {
@@ -246,22 +288,7 @@ func editFile(topic, target string) {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
 		os.Exit(1)
 	}
-
-	target = strings.Replace(target, " ", "-", -1)
-	var found bool
-
-	for _, file := range files {
-		if strings.Contains(file.Name(), target) {
-			found = true
-			fullPath := fmt.Sprintf("%s/%s/%s", directory, completeTopic, file.Name())
-			openFile(fullPath)
-		}
-	}
-
-	if !found {
-		fmt.Println("Oops, couldn't find that file!")
-		os.Exit(1)
-	}
+	findFileInList(files, target, completeTopic)
 }
 
 func main() {
@@ -290,9 +317,12 @@ func main() {
 			help(1)
 		}
 	case "edit":
-		if len(os.Args) < 4 {
+		if len(os.Args) < 3 {
 			fmt.Println("I need a topic and a note to edit!")
 			os.Exit(1)
+		}
+		if len(os.Args) == 3 {
+			editFileInTopic(os.Args[2])
 		}
 		editFile(os.Args[2], strings.Join(os.Args[3:], "-"))
 	default:
