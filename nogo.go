@@ -281,7 +281,7 @@ func editFileInTopic(topic string) {
 		fmt.Printf("\nFiles in %s:\n", completeTopic)
 	}
 	for _, file := range files {
-		fmt.Printf(" - %s\n", parseFilename(file.Name()))
+		fmt.Printf("   %s\n", parseFilename(file.Name()))
 	}
 	fmt.Println()
 	file := acceptInput(fmt.Sprintf("What file would you like to edit in %s? ", completeTopic))
