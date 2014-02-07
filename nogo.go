@@ -23,11 +23,18 @@ var helpText = `
 nogo - the notes helper
 
 actions:
+
+  nogo help
+
   nogo new
   nogo new [topic]
   nogo new [topic] [event]
+
   nogo ls
   nogo ls [topic]
+
+  nogo edit
+  nogo edit [topic]
   nogo edit [topic] [note name substring]
 `
 
