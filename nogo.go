@@ -253,6 +253,11 @@ func findFileInList(files []os.FileInfo, target, completeTopic string) {
 	}
 }
 
+func editFileWithoutTopic() {
+	topic := acceptInput("\nWhat topic would you like to edit? ")
+	editFileInTopic(topic)
+}
+
 func editFileInTopic(topic string) {
 	completeTopic, err := findTopicBySubstring(topic)
 	if err != nil {
@@ -322,8 +327,7 @@ func main() {
 	case "edit":
 		switch commandArgs {
 		case 0:
-			fmt.Println("I need a topic and a note to edit!")
-			os.Exit(1)
+			editFileWithoutTopic()
 		case 1:
 			editFileInTopic(os.Args[2])
 		default:
