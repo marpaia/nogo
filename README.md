@@ -89,6 +89,12 @@ Use `go get` to install nogo:
 go get github.com/marpaia/nogo
 ```
 
+Once you do that, the `nogo` binary will be installed at `$GOPATH/bin`. It's
+assumed that if you have a `$GOPATH` set up, that you've also added
+`$GOPATH/bin` to your path, but if you haven't, you should do that.
+
+For more information on `GOPATH` and such, refer to http://golang.org/doc/code.html#GOPATH
+
 ## External dependencies
 
 This project has no external dependencies other than the Go standard library.
