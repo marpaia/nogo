@@ -296,35 +296,39 @@ func main() {
 		help(0)
 	}
 	action := os.Args[1]
+	commandArgs := len(os.Args) - 2
 
 	switch action {
 	case "new":
-		if len(os.Args) == 2 {
+		switch commandArgs {
+		case 0:
 			handleNew()
-		} else if len(os.Args) == 3 {
+		case 1:
 			handleNewTopic(os.Args[2])
-		} else if len(os.Args) == 4 {
+		case 2:
 			handleNewEvent(os.Args[2], os.Args[3])
-		} else {
+		default:
 			help(1)
 		}
 	case "ls":
-		if len(os.Args) == 2 {
+		switch commandArgs {
+		case 0:
 			listTopics()
-		} else if len(os.Args) == 3 {
+		case 1:
 			listNotes(os.Args[2])
-		} else {
+		default:
 			help(1)
 		}
 	case "edit":
-		if len(os.Args) < 3 {
+		switch commandArgs {
+		case 0:
 			fmt.Println("I need a topic and a note to edit!")
 			os.Exit(1)
-		}
-		if len(os.Args) == 3 {
+		case 1:
 			editFileInTopic(os.Args[2])
+		default:
+			editFile(os.Args[2], strings.Join(os.Args[3:], "-"))
 		}
-		editFile(os.Args[2], strings.Join(os.Args[3:], "-"))
 	default:
 		help(0)
 	}
