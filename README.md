@@ -166,5 +166,7 @@ https://github.com/marpaia/nogo/issues?labels=enhancement
 ## Contact
 
 Mike Arpaia
+
 [mike@arpaia.co](mailto:mike@arpaia.co)
+
 [@mikearpaia](https://twitter.com/mikearpaia)
