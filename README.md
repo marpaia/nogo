@@ -162,3 +162,9 @@ teeth contributing to open source software as this is a pretty simple piece of
 code that can be improved in a lot of ways.
 
 https://github.com/marpaia/nogo/issues?labels=enhancement
+
+## Contact
+
+Mike Arpaia
+[mike@arpaia.co](mailto:mike@arpaia.co)
+[@mikearpaia](https://twitter.com/mikearpaia)
