@@ -144,7 +144,7 @@ This project has no external dependencies other than the Go standard library.
 
 If you'd like to customize nogo, do so as you would any other Go project. Use
 `go get` as described above to download and install the software, edit the code
-in whatever way you see fit, and execute `go install github.com/marpaia/nogo`.
+in whatever way you see fit, and execute `go install github.com/marpaia/nogo`
 
 ## Contributing
 
