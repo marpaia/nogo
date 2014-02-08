@@ -311,6 +311,8 @@ func main() {
 	commandArgs := len(os.Args) - 2
 
 	switch action {
+	case "help":
+		help(0)
 	case "new":
 		switch commandArgs {
 		case 0:
@@ -341,6 +343,6 @@ func main() {
 			editFile(os.Args[2], strings.Join(os.Args[3:], "-"))
 		}
 	default:
-		help(0)
+		help(1)
 	}
 }
