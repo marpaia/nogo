@@ -8,6 +8,10 @@ notes.
 
 ## Examples
 
+### Help
+
+Get some help
+
 ```
 ~ nogo
 
@@ -27,28 +31,65 @@ actions:
   nogo edit
   nogo edit [topic]
   nogo edit [topic] [note name substring]
+```
 
-~ nogo ls
+### Browse your existing notes
 
-looks like there aren't any topics to list!
-
-~ nogo new
-Enter the notes topic: this
-Enter the event name: that
+List the topics that you've created (similar to Evernote's notebooks)
+```
 ~ nogo ls
 
 all topics:
-   this
+   meetings
+   reference
+```
 
-~ nogo ls this
+List the individual notes in a specific topic. Note that what you pass as the
+argument can be a substring of the actual topic as well and `nogo` will find it
+```
+~ nogo ls reference
 
-notes in this:
-   that (2013-11-23)
+notes in reference:
+   golang
+   python
+```
 
+### Create a new note
+
+Create a new file with no arguments
+```
+~ nogo new
+Enter the notes topic: reference
+Enter the event name: ruby
+```
+
+Create a new file with some arguments
+```
+~ nogo new reference ruby
 ~
 ```
 
-### Completion and substrings
+### Edit existing notes
+
+Edit a note with substring of both the topic and the individual note
+```
+~ nogo edit ref py
+~
+```
+
+Edit a note in a specific topic, even when you don't remember what it was
+called
+```
+~ nogo edit reference
+
+Files in reference:
+   golang
+   python
+
+What file would you like to edit in reference? python
+```
+
+## Completion and substrings
 
 Most `nogo` commands don't actually require you to write out the whole topic
 or event name. For example, if you have a topic "meetings" and an event
