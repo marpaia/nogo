@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -224,7 +223,7 @@ func findTopicBySubstring(substring string) (string, error) {
 		}
 	}
 
-	return "", errors.New("Couldn't find that filename")
+	return "", fmt.Errorf("couldn't find '%s'", substring)
 }
 
 // listNotes accepts a topic substring and lists all of the notes in that topic
