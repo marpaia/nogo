@@ -74,15 +74,21 @@ func help(exit int) {
 // that they submitted
 func acceptInput(question string) string {
 	reader := bufio.NewReader(os.Stdin)
+	var (
+		response string
+		err      error
+	)
+	for response == "" {
 
-	fmt.Print(question)
-	response, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Oops, what was that?")
-		os.Exit(1)
+		fmt.Print(question)
+		response, err = reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Oops, what was that?")
+			os.Exit(1)
+		}
+		response = strings.TrimSpace(response)
 	}
-
-	return strings.TrimSpace(response)
+	return response
 }
 
 // normalizeString accepts a pointer to a string and modifies it to replace all
