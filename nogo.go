@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"strings"
 )
@@ -53,8 +53,9 @@ var editor string
 // relevant strings
 func init() {
 	directory = os.Getenv("NOGODIR")
+	user, _ := user.Current()
 	if directory == "" {
-		directory = fmt.Sprintf("%s/%s", os.Getenv("HOME"), NotesSubDir)
+		directory = filepath.Join(user.HomeDir, NotesSubDir)
 	}
 
 	editor = os.Getenv("EDITOR")
@@ -73,15 +74,21 @@ func help(exit int) {
 // that they submitted
 func acceptInput(question string) string {
 	reader := bufio.NewReader(os.Stdin)
+	var (
+		response string
+		err      error
+	)
+	for response == "" {
 
-	fmt.Print(question)
-	response, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Oops, what was that?")
-		os.Exit(1)
+		fmt.Print(question)
+		response, err = reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Oops, what was that?")
+			os.Exit(1)
+		}
+		response = strings.TrimSpace(response)
 	}
-
-	return strings.TrimSpace(response)
+	return response
 }
 
 // normalizeString accepts a pointer to a string and modifies it to replace all
@@ -175,15 +182,7 @@ func isDir(path string) bool {
 	if err != nil {
 		return false
 	}
-
-	switch mode := fi.Mode(); {
-	case mode.IsDir():
-		return true
-	case mode.IsRegular():
-		return false
-	default:
-		return false
-	}
+	return fi.IsDir()
 }
 
 // listTopics lists the existing topics, while avoiding .git artifacts
@@ -198,7 +197,7 @@ func listTopics() {
 
 	toPrint := []string{}
 	for _, file := range files {
-		path := fmt.Sprintf("%s/%s", directory, file.Name())
+		path := filepath.Join(directory, file.Name())
 		if isDir(path) && !strings.HasPrefix(file.Name(), ".git") {
 			toPrint = append(toPrint, file.Name())
 		}
@@ -230,7 +229,7 @@ func findTopicBySubstring(substring string) (string, error) {
 		}
 	}
 
-	return "", errors.New("Couldn't find that filename")
+	return "", fmt.Errorf("couldn't find '%s'", substring)
 }
 
 // listNotes accepts a topic substring and lists all of the notes in that topic
@@ -240,7 +239,7 @@ func listNotes(topic string) {
 		fmt.Println("Oops, couldn't find that topic:", topic)
 		os.Exit(1)
 	}
-	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
+	topicDir := filepath.Join(directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
@@ -296,7 +295,7 @@ func findFilesInTopic(topic string) ([]os.FileInfo, string) {
 		fmt.Println("Oops, couldn't find that topic:", topic)
 		os.Exit(1)
 	}
-	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
+	topicDir := filepath.Join(directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
