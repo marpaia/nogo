@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"strings"
 )
@@ -53,8 +54,9 @@ var editor string
 // relevant strings
 func init() {
 	directory = os.Getenv("NOGODIR")
+	user, _ := user.Current()
 	if directory == "" {
-		directory = fmt.Sprintf("%s/%s", os.Getenv("HOME"), NotesSubDir)
+		directory = filepath.Join(user.HomeDir, NotesSubDir)
 	}
 
 	editor = os.Getenv("EDITOR")
@@ -198,7 +200,7 @@ func listTopics() {
 
 	toPrint := []string{}
 	for _, file := range files {
-		path := fmt.Sprintf("%s/%s", directory, file.Name())
+		path := filepath.Join(directory, file.Name())
 		if isDir(path) && !strings.HasPrefix(file.Name(), ".git") {
 			toPrint = append(toPrint, file.Name())
 		}
@@ -240,7 +242,7 @@ func listNotes(topic string) {
 		fmt.Println("Oops, couldn't find that topic:", topic)
 		os.Exit(1)
 	}
-	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
+	topicDir := filepath.Join(directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
@@ -296,7 +298,7 @@ func findFilesInTopic(topic string) ([]os.FileInfo, string) {
 		fmt.Println("Oops, couldn't find that topic:", topic)
 		os.Exit(1)
 	}
-	topicDir := fmt.Sprintf("%s/%s", directory, completeTopic)
+	topicDir := filepath.Join(directory, completeTopic)
 	files, err := ioutil.ReadDir(topicDir)
 	if err != nil {
 		fmt.Println("Oops, couldn't read that directory:", topicDir)
