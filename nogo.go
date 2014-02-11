@@ -177,15 +177,7 @@ func isDir(path string) bool {
 	if err != nil {
 		return false
 	}
-
-	switch mode := fi.Mode(); {
-	case mode.IsDir():
-		return true
-	case mode.IsRegular():
-		return false
-	default:
-		return false
-	}
+	return fi.IsDir()
 }
 
 // listTopics lists the existing topics, while avoiding .git artifacts
