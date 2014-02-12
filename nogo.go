@@ -344,10 +344,8 @@ func main() {
 			handleNew()
 		case 1:
 			handleNewTopic(os.Args[2])
-		case 2:
-			handleNewEvent(os.Args[2], os.Args[3])
 		default:
-			help(1)
+			handleNewEvent(os.Args[2], strings.Join(os.Args[3:], "-"))
 		}
 	case "ls":
 		switch commandArgs {
