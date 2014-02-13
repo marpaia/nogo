@@ -49,6 +49,13 @@ var directory string
 // variable
 var editor string
 
+// visualEditor holds the path to a visual markdown editor (like Writer Pro)
+// it can be set by setting the $NOGOVISUALEDITOR environment variable. if you
+// don't set that variable, nogo will just use the $EDITOR environment variable
+// as described above
+var visualEditor string
+var useVisualEditor bool
+
 // init gathers the environment variables on the system and interpolates
 // relevant strings
 func init() {
@@ -61,6 +68,11 @@ func init() {
 	editor = os.Getenv("EDITOR")
 	if editor == "" {
 		editor = DefaultEditor
+	}
+
+	visualEditor = os.Getenv("NOGOVISUALEDITOR")
+	if visualEditor != "" {
+		useVisualEditor = true
 	}
 }
 
@@ -98,12 +110,17 @@ func normalizeString(s *string) {
 }
 
 // openFile accepts a file name as a parameter and opens it with the editor
-// that is stored in the "editor" variable
+// that is stored in the "editor" variable or the "visualEditor" variable
 func openFile(fileName string) {
-	cmd := exec.Command(editor, fileName)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	var cmd *exec.Cmd
+	if !useVisualEditor {
+		cmd = exec.Command(editor, fileName)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+	} else {
+		cmd = exec.Command("open", fileName, "-a", visualEditor)
+	}
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println("Couldn't open the file:", err)
