@@ -117,8 +117,8 @@ export NOGODIR="/Users/marpaia/Desktop"
 ## Requirements
 
 The only requirement is that you have Go installed. If you don't have Go
-installed and, for some reason, would like to keep it that way, let me know
-and I'll upload a nogo binary somewhere for you to download.
+installed and, for some reason, would like to keep it that way, you can
+download one here: http://gobuild.io/download/github.com/marpaia/nogo
 
 You can install go from http://golang.org/doc/install or via a package manager.
 
